@@ -1,0 +1,35 @@
+/*
+Two Sum Total Accepted: 61629 Total Submissions: 340186 My Submissions Question Solution 
+Given an array of integers, find two numbers such that they add up to a specific target number.
+
+The function twoSum should return indices of the two numbers such that they add up to the target, where index1 must be less than index2. Please note that your returned answers (both index1 and index2) are not zero-based.
+
+You may assume that each input would have exactly one solution.
+
+Input: numbers={2, 7, 11, 15}, target=9
+Output: index1=1, index2=2
+
+Solution: (1) brute force: for every first digit, scan rest of the array to find the target. O(n^2)
+          (2) since this problem is to return indices, we can't sort the array. if we can sort the array, use 2 pointers
+              which is similar with 3 sum, 3 sum cloest, 4 sum. O(n)
+          (3) Hashtable to store target for corresponding visited number we need. O(n)
+  Here we implement hashtable solution.
+*/
+  public int[] twoSum(int[] numbers, int target) {
+      int[] res = new int[2];
+      if(numbers.length<2) return res;
+      
+      HashMap<Integer, Integer> targetMap = new HashMap<Integer, Integer>();
+      //key: target, value: corresponding index
+      
+      for (int i = 0; i<numbers.length; i++){
+        if (targetMap.containsKey(numbers[i])){
+            res[0] = targetMap.get(numbers[i]) + 1;
+            res[1] = i + 1;
+            break;
+        }else{
+            targetMap.put(target- numbers[i], i);
+        }
+      }
+      return res;
+  }
