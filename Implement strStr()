@@ -1,0 +1,56 @@
+/*
+Implement strStr().
+Returns the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.
+
+Solution: (1) Sliding window: two pointers, one is for start, the other is the runner. 
+          (2) Rolling hash: it is possible that two strings are the same if they have the same hash code. Time: O(n) 
+
+*/
+public int strStr_window(String haystack, String needle) {
+    if (haystack.length() < needle.length()) return -1;
+    if (needle ==null || needle.length() == 0) return 0;
+    
+    int start = 0;
+    int i = 0;
+    while (i <= haystack.length() - needle.length()){
+        if ( haystack.charAt(i) == needle.charAt(0)){
+            int j = 1;
+            for (; j<needle.length() && haystack.charAt(i+j) == needle.charAt(j); j++);
+            if (j ==needle.length()){
+                return i;
+            }
+        }
+        i++;
+    }
+    return -1;
+}
+
+public int strStr_rh(String haystack, String needle){
+    if (haystack.length() < needle.length()) return -1;
+    if (needle ==null || needle.length() == 0) return 0;
+    
+    int hayCode = 0;
+    int needleCode = 0;
+    for (int i = 0; i<needle.length(); i++){
+        hayCode += haystack.charAt(i);
+        needleCode += needle.charAt(i);
+    }
+    
+    int head = 0;
+    int tail = needle.length() - 1;
+    while ( tail < haystack.length()){
+        if (hayCode == needleCode){
+            int i = 0;
+            for (; i < needle.length() && haystack.charAt(head+i) == needle.charAt(i); i++);
+            if ( i == needle.length()) return head;
+        }else{
+            if (tail == haystack.length()-1) return -1;
+            hayCode -= haystack.charAt(head);
+            head++;
+            tail++;
+            hayCode += haystack.charAt(tail);
+        }
+    }
+    return -1;
+    
+}
