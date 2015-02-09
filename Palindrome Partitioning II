@@ -1,0 +1,47 @@
+/*
+Palindrome Partitioning II
+Given a string s, partition s such that every substring of the partition is a palindrome.
+Return the minimum cuts needed for a palindrome partitioning of s.
+
+For example, given s = "aab",
+Return 1 since the palindrome partitioning ["aa","b"] could be produced using 1 cut.
+
+Solution: DP
+  (1) get a dictionary that s.substring(i, j+1),that is [i, j] is a palindrome or not --first DP
+  (2) second DP: subproblem: minCut starting from ith char
+        be careful for the bound: [i, j] is a palindrome and j is the last character, 
+        dp[j+1] + 1 should be 0; bound: dp[j+1] = -1 j+1 = s.length()+1 
+*/
+
+ public int minCut(String s) {
+        if(s==null||s.length()==0){
+            return 0;
+        }
+        
+        boolean[][] dic = getDic(s);
+        int[] dp = new int[s.length()+1];
+        int n = s.length();
+        dp[n] = -1;
+        
+        for (int i = n-1; i>=0; i--){
+            dp[i] = n-1-i;
+            for (int j = i; j < n; j++){
+                if (dic[i][j]){
+                    dp[i] = Math.min(dp[i], dp[j+1] + 1);
+                }
+            }
+        }
+        return dp[0];
+  }
+  private boolean[][] getDic(String s){
+      boolean[][] dic = new boolean[s.length()][s.length()];
+      
+      for (int i = s.length() - 1; i>=0; i--){
+          for (int j = i; j<s.length(); j++){
+              if(s.charAt(i) == s.charAt(j) && ( (j-i<2) || dic[i+1][j-1])){
+                  dic[i][j] = true;
+              }
+          }
+      }
+      return dic;
+  }
