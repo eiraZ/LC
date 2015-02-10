@@ -1,0 +1,57 @@
+/*
+Given a string S and a string T, find the minimum window in S which will contain all the characters in T in complexity O(n).
+
+For example,
+S = "ADOBECODEBANC"
+T = "ABC"
+Minimum window is "BANC".
+
+Note:
+If there is no such window in S that covers all characters in T, return the emtpy string "".
+
+If there are multiple such windows, you are guaranteed that there will always be only one unique minimum window in S.
+
+Solution: (1) int[256] to record # of appearance in T.
+          (2) search in S. if we found a window, update left bound.
+*/
+
+public String minWindow(String S, String T) {
+        int M = S.length();
+        int N = T.length();
+        if (M < N) return "";
+        
+        int[] found = new int[256];
+        int[] need = new int[256];
+        
+        for (int i = 0; i< N; i++){
+            need[T.charAt(i)]++;
+        }
+        
+        int resLeft = -1;
+        int resEnd = M;
+        int count = 0;
+        
+        for (int start = 0, end = 0; end < M; end++){
+            if (need[S.charAt(end)] == 0 ) continue;
+            if (found[S.charAt(end)] < need[S.charAt(end)]){
+                count++;
+            }
+            found[S.charAt(end)]++;
+            
+            if (count != N) continue;
+            //update left
+            for (; start < end; start++){
+                if (need[S.charAt(start)] == 0 ) continue;
+                if( found[S.charAt(start)] == need[S.charAt(start)]) break;
+                found[S.charAt(start)]--;
+            }
+            //update length
+            if (end-start < resEnd - resLeft){
+                resLeft = start;
+                resEnd = end;
+            }
+        }
+        
+        if(resLeft == -1) return "";
+        return S.substring(resLeft, resEnd+1);
+    }
