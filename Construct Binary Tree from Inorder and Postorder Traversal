@@ -1,0 +1,41 @@
+/*
+Given inorder and postorder traversal of a tree, construct the binary tree.
+
+Note:
+You may assume that duplicates do not exist in the tree.
+
+Solution: postorder provides root element
+*/
+
+/**
+ * Definition for binary tree
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+ public TreeNode buildTree(int[] inorder, int[] postorder) {
+    if (inorder == null || postorder == null || inorder.length == 0 ||inorder.length!=postorder.length)  return null;
+    HashMap<Integer, Integer> map = new HashMap<TreeNode, Integer>();
+    
+    for (int i = 0; i<inorder.length; i++){
+        map.put(inorder[i], i);
+    }
+    return helper(inorder, 0, inorder.length -1, postorder, 0, postorder.length-1, map);
+ }
+ 
+ private TreeNode helper(int[] inorder, int inStart, int inEnd, int[] postorder, int postStart, int postEnd, HashMap<Integer, Integer> map){
+    if (inStart>inEnd || postStart>postEnd) return null;
+    if (inStart == inEnd || postStart == postEnd) return new TreeNode(postorder[postStart]);
+    
+    int rootIndex = map.get(postorder[postEnd]);
+    TreeNode root = new TreeNode(postorder[postEnd]);
+    int leftLength = rootIndex - inStart;
+    //int rightLength = inEnd - rootIndex;
+    root.left = helper(inorder, inStart, rootIndex-1, postorder, postStart, postStart+leftLength-1, map);
+    root.right = helper (inorder, rootIndex+1, inEnd, postorder, postStart+leftLength, postEnd-1, map);
+    return root;
+ }
+ 
