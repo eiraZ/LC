@@ -9,8 +9,12 @@ For example,
 Given [5, 7, 7, 8, 8, 10] and target value 8,
 return [3, 4].
 
+Solution: (1) search for the lower bound and upper bound.
+          (2) Think of searching the insert position. we do search(target), search(target+1). this is similar with lowerbound.
+              but we need to subtract search(target+1)--;
+
 */
-public int[] searchRange(int[] A, int target) {
+public int[] searchRange_LU(int[] A, int target) {
     int[] res = new int[2];
     res[0] = searchLowerBound(A, target);
     res[1] = searchUpperBound(A, target);
@@ -19,6 +23,18 @@ public int[] searchRange(int[] A, int target) {
         Arrays.fill(res, -1);
     }
     return res;
+}
+
+public int[] searchRange_insert(int[] A, int target){
+    int[] res = new int[2];
+    res[0] = searchLowerBound(A, target);
+    res[1] = searchLowerBound(A, target+1);
+    res[1]--;
+    if(res[0]>res[1]){
+        Arrays.fill(res, -1);
+    }
+    return res;
+    
 }
 private int searchLowerBound(int[] A, int target){
     if (A.length ==0) return -1;
