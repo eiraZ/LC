@@ -1,0 +1,51 @@
+/*
+Implement next permutation, which rearranges numbers into the lexicographically next greater permutation of numbers.
+
+If such arrangement is not possible, it must rearrange it as the lowest possible order (ie, sorted in ascending order).
+
+The replacement must be in-place, do not allocate extra memory.
+
+Here are some examples. Inputs are in the left-hand column and its corresponding outputs are in the right-hand column.
+1,2,3 → 1,3,2
+3,2,1 → 1,2,3
+1,1,5 → 1,5,1
+
+Solution: back->front: find the first decreasing number index, mark as dec
+          sort dec+1 -> end
+          if dec == 0, done!
+          else:
+              find the first element > num[dec] in this sorted array
+              swap
+*/
+public void nextPermutation(int[] num) {
+    if(num.length == 0 ) return;
+    int dec = -1;
+    for (int i = num.length - 1; i > 0; i--){
+        if (num[i-1] < num[i]){
+            dec = i-1;
+            break;
+        }
+    }
+    //sort: we can swap 
+    int left = dec+1;
+    int right = num.length - 1;
+    while(left < right){
+        swap(num, left, right);
+        left++;
+        right--;
+    }
+    if(dec == -1) return;
+    for (int i = dec + 1; i < num.length; i++){
+        if (num[i] > num[dec]){
+            swap(num, dec, i);
+            break;
+        }
+    }
+    
+}
+
+private void swap(int[] num, int in1, int in2){
+    int temp = num[in1];
+    num[in1] = num[in2];
+    num[in2] = temp;
+}
