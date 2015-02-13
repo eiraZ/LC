@@ -1,0 +1,24 @@
+/*
+Find the contiguous subarray within an array (containing at least one number) which has the largest product.
+
+For example, given the array [2,3,-2,4],
+the contiguous subarray [2,3] has the largest product = 6.
+
+Solution: DP
+          max = Math.max(pre, pre*A[i]);
+          pay attention to such case: neg * neg = pos
+          keep curMax, curMin for future comparison.
+*/
+public int maxProduct(int[] A) {
+    if (A.length == 0 ) return 0;
+    int res = A[0];
+    int curMin = A[0];
+    int curMax = A[0];
+    for (int i = 1; i < A.length; i++){
+        int temp = curMax;
+        curMax = Math.max(Math.max(curMax * A[i], curMin * A[i]), A[i]);
+        curMin = Math.min(Math.min(temp * A[i], curMin * A[i]), A[i]);
+        res = Math.max(res, curMax);
+    }
+    return res;
+}
