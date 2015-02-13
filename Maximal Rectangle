@@ -1,0 +1,50 @@
+/*
+Given a 2D binary matrix filled with 0's and 1's, find the largest rectangle containing all ones and return its area.
+
+Follow up based on Largest rectangle in histogram graph
+
+*/
+public int maximalRectangle(char[][] matrix) {
+    if(matrix.length == 0|| matrix[0].length == 0) return 0;
+    int[] height = new int[matrix[0].length;
+    
+    int res = 0;
+    for(int i = 0; i<matrix.length; i++){
+        for (int j = 0; j<matrix[0].length; j++){
+            if (matrix[i][j] =='1'){
+                height[j] +=1;
+            }else{
+                height[j] = 0;
+            }
+        }
+        
+        //largest area in histogram 
+        int curMax = largestArea(height);
+        res = Math.max(res, curMax);
+    }
+    return res;
+}
+
+private int largestArea(int[] height){
+    Stack<Integer> stack = new Stack<Integer>();
+    int res = 0;
+    int i = 0;
+    
+    while (i <height.length){
+        if (stack.empty() || height[stack.peek()] < height[i]){
+            stack.push(i);
+            i++;
+        }else{
+            int curHeight = height[stack.pop()];
+            int width = stack.empty()? i: (i - stack.peek()-1);
+            res = Math.max(res, curHeight * width);
+        }
+    }
+    
+    while (!stack.empty()){
+        int curHeight = height[stack.pop()];
+        int width = stack.empty()? height.length: (height.length - stack.peek()-1);
+        res = Math.max(res, curHeight * width);
+    }
+    return res;
+}
