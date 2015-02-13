@@ -1,0 +1,79 @@
+/*
+Given a m x n matrix, if an element is 0, set its entire row and column to 0. Do it in place.
+
+Solution: (1) use boolean[] row, col to store zero position!
+          (2) use contstant space to mark zero position: topRow, firstCol. before that we should check top row and first column:
+             it contains zero or not.
+*/
+ public void setZeroes(int[][] matrix) {
+    if (matrix.length == 0 || matrix[0].length == 0) return;
+    boolean[] row = new boolean[matrix.length];
+    boolean[] col = new boolean[matrix[0].length];
+    
+    for (int i = 0; i< matrix.length; i++){
+        for (int j = 0; j < matrix[0].length; j++){
+            if (matrix[i][j] == 0){
+                row[i] = true;
+                col[j] = true;
+            }
+        }
+    }
+    
+    for (int i = 0; i < matrix.length; i++){
+        for (int j = 0; j< matrix[0].length; j++){
+            if(row[i] || col[j]){
+                matrix[i][j] = 0;
+            }
+        }
+    }
+ }
+ 
+ public void setZeroes(int[][] matrix){
+         /*use constant space*/
+        
+        boolean topRowHasZero = false;
+        boolean leftColHasZero = false;
+        int m = matrix.length;
+        int n = matrix[0].length;
+        
+        for (int i = 0; i < n; i++){
+            if(matrix[0][i]==0){
+                topRowHasZero = true;
+                break;
+            }
+        }
+        for (int i = 0; i < m; i++){
+            if (matrix[i][0]==0){
+                leftColHasZero = true;
+                break;
+            }
+        }
+        
+        for (int i = 0; i<m; i++){
+            for (int j = 0; j<n; j++){
+                if(matrix[i][j]==0){
+                    matrix[i][0] = 0;
+                    matrix[0][j] = 0;
+                }
+            }
+        }
+        
+        for (int i = 1; i < m; i++){
+            for (int j = 1; j < n; j++){
+                if (matrix[i][0]==0 || matrix[0][j] == 0){
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+        
+        if (topRowHasZero){
+            for (int i=0; i<n; i++){
+                matrix[0][i] = 0;
+            }
+        }
+        if (leftColHasZero){
+            for (int i = 0; i<m; i++){
+                matrix[i][0] = 0;
+            }
+        }
+ }
