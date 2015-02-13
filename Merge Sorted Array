@@ -1,0 +1,30 @@
+/*
+iven two sorted integer arrays A and B, merge B into A as one sorted array.
+
+Note:
+You may assume that A has enough space (size that is greater or equal to m + n) 
+to hold additional elements from B. The number of elements initialized in A and B are m and n respectively.
+
+Solution: back -> front
+*/
+
+public void merge(int A[], int m, int B[], int n) {
+    int right = m + n - 1;
+    int Aright = m-1;
+    int Bright = n-1;
+    while ( Aright >=0 && Bright >=0){
+        if (A[Aright] > B[Bright]){
+            A[right] = A[Aright];
+            Aright--;
+        }else{
+            A[right] = B[Bright];
+            Bright--;
+        }
+        right--;
+    }
+    while (Bright >= 0){
+        A[right] = B[Bright];
+        Bright--;
+    }
+    
+}
