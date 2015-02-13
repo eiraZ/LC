@@ -1,0 +1,69 @@
+/*
+Given an unsorted array of integers, find the length of the longest consecutive elements sequence.
+
+For example,
+Given [100, 4, 200, 1, 3, 2],
+The longest consecutive elements sequence is [1, 2, 3, 4]. Return its length: 4.
+
+Your algorithm should run in O(n) complexity.
+Solution: (1) HashSet. traverse twice.
+          (2) HashMap. update the furthest element. duplicates!
+*/
+public int longestConsecutive_set(int[] num) {
+    if(num.length == 0) return 0;
+    HashSet<Integer> set = new HashSet<Integer>();
+    for(int i = 0; i<num.length; i++){
+        set.add(num[i]);
+    }
+    
+    int res = 1;
+    
+    while (!set.isEmpty()){
+        Iterator<Integer> iterator = set.iterator();
+        int cur = iterator.next();
+        set.remove(cur);
+        int count = 1;
+        int forward = cur+1;
+        while(set.contains(forward)){
+            count++;
+            set.remove(forward);
+            forward++;
+        }
+        int back = cur-1;
+        while(set.contains(back)){
+            count++;
+            set.remove(back);
+            back--;
+        }
+        res = Math.max(res, count);
+    }
+    return res;
+}
+
+public int longestConsecutive_map(int[] num) {
+    if(num.length == 0) return 0;
+    HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+    
+    int res = 1;
+    for (int i = 0; i<num.length; i++){
+        int cur = num[i];
+        if (map.containsKey(cur)) continue;
+        if(map.containsKey(cur-1) && map.containsKey(cur+1)){
+            map.put(cur, map.get(cur-1)+1+map.get(cur+1));
+            map.put(cur+map.get(cur+1), map.get(cur));
+            map.put(cur - map.get(cur-1), map.get(cur));
+        }else if(map.containsKey(cur-1)){
+            map.put(cur, map.get(cur-1) + 1);
+            map.put(cur - map.get(cur-1), map.get(cur));
+        }else if(map.containsKey(cur+1)){
+            map.put(cur, map.get(cur+1)+1);
+            map.put(cur+map.get(cur+1), map.get(cur));
+        }else{
+            map.put(cur, 1);
+        }
+        res = Math.max(res, map.get(cur));
+    }
+    
+    return res;
+    
+}
