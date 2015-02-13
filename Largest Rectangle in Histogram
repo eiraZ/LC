@@ -1,0 +1,76 @@
+/*
+Given n non-negative integers representing the histogram's bar height where the width of each bar is 1, 
+find the area of largest rectangle in the histogram.
+
+For example,
+Given height = [2,1,5,6,2,3],
+return 10.
+Solution: (1)brute force: for every height, calculate the largest area: left bar, right bar. O(n^2)
+          (2)Greedy: Only calucate area when we reach current maximum value,  which is a model for the stack optimization.
+          (3) stack: keep track of the increasing order of the array, until we met a bottleneck. O(n)
+*/
+public int largestRectangleArea_BF(int[] height) {
+    if(height.length == 0 ) return 0;
+    int res = height[0];
+    for (int i = 0; i < height.length; i++){
+        //check left bound
+        int left = i;
+        for(int j = i -1; j>=0 && height[j] >= height[i]; j--){
+            left = j;
+        }
+        int right = i;
+        for (int j = i+1; j<height.length && height[j]>=height[i]; j++){
+            right = j;
+        }
+        res = Math.max(res, height[i]*(right-left+1));
+    }
+    return res;
+}
+
+public int largestRectangleArea_greedy(int[] height) {
+    if (height.length == 0 ) return 0;
+    int res = height[0];
+    for (int i = 0; i<height.length; i++){
+        if( i < height.length - 1 && height[i] <= height[i+1]) continue;
+        int curHeight = height[i];
+        for(int j = i; j>=0; j--){
+            curHeight = height[j];
+            res = Math.max(res, (i-j+1)*curHeight);
+        }
+    }
+    return res;
+}
+
+public int largestRectangleArea_stack(int[] height) {
+    if (height.length == 0 ) return 0;
+    int res = height[0];
+    Stack<Integer> stack = new Stack<Integer>();
+    
+    int i = 0;
+    while (i < height.length){
+        if(stack.empty() || height[stack.peek()]< height[i]){
+            stack.push(i);
+            i++;
+        }else{
+            int curHeight = height[stack.pop()];
+            int width = stack.empty()? i : (i-stack.peek()-1);  
+            res = Math.max(res, curHeight*width);
+        }
+        /*
+        while (!stack.empty() && height[stack.peek()]>=height[i]){
+            int curHeight = height[stack.pop()];
+            int width = stack.empty()? i : (i-stack.peek()-1);  
+            res = Math.max(res, curHeight*width);
+        }
+        stack.push(i);
+        i++;
+        */
+    }
+    
+    while(!stack.empty()){
+        int curHeight = height[stack.pop()];
+        int width = stack.empty()? height.length: (height.length-stack.peek()-1);
+        res = Math.max(res, curHeight * width);
+    }
+    return res;
+}
