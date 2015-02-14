@@ -34,19 +34,17 @@ public String fractionToDecimal(int numerator, int denominator) {
     sb.append(".");
     
     HashMap<Long, Integer> map = new HashMap<Long, Integer>();
-    numer = remain * 10;
-    //map.put(numer, sb.length());
     
-    while (numer > 0){
-        if (map.containsKey(numer)){
-            sb.insert(map.get(numer), "(");
+    while (remain > 0){
+        if (map.containsKey(remain)){
+            sb.insert(map.get(remain), "(");
             sb.append(")");
             break;
         }
-        map.put(numer, sb.length());
-        long digit = numer / deno;
-        sb.append(digit);
-        numer = (numer % deno) * 10;
+        map.put(remain, sb.length());
+        remain *= 10;
+        sb.append(remain/deno);
+        remain %= deno;
         
     }
     return sb.toString();
