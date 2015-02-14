@@ -1,0 +1,88 @@
+/*
+A linked list is given such that each node contains an additional random pointer which could point to any node in the list
+or null.
+
+Return a deep copy of the list.
+
+Solution: (1)hashmap
+          (2) connect to the next. partition: use a pre-node.
+*/
+
+/**
+ * Definition for singly-linked list with a random pointer.
+ * class RandomListNode {
+ *     int label;
+ *     RandomListNode next, random;
+ *     RandomListNode(int x) { this.label = x; }
+ * };
+ */
+  public RandomListNode copyRandomList_map(RandomListNode head) {
+    if(head == null) return null;
+    
+    HashMap<RandomListNode, RandomListNode> map = new HashMap<RandomListNode, RandomListNode>();
+    RandomListNode dummy = new RandomListNode(0);
+    RandomListNode pre = dummy;
+    
+    RandomListNode cur = head;
+    while (cur!=null){
+        //current copy
+        if (!map.containsKey(cur)){
+            map.put(cur, new RandomListNode(cur.label));
+        }
+        RandomListNode temp = map.get(cur);
+        pre.next = temp;
+        
+        //random copy
+        if(cur.random !=null){
+            if (!map.containsKey(cur.random)){
+                map.put(cur.random, new RandomListNode(cur.random.label));
+            }
+            RandomListNode randCopy = map.get(cur.random);
+            temp.random = randCopy;
+        }
+        //move forward
+        pre = pre.next;
+        cur = cur.next;
+    }
+    return dummy.next;
+}
+
+public RandomListNode copyRandomList_append(RandomListNode head) {
+    if(head == null) return null;
+    RandomListNode cur = head;
+    
+    //copy current node
+    while (cur != null){
+        RandomListNode temp = cur.next;
+        RandomListNode copy = new RandomListNode(cur.label);
+        cur.next = copy;
+        copy.next = temp;
+        cur = temp;
+    }
+    
+    //random node
+    cur = head;
+    while (cur != null){
+        RandomListNode temp = cur.next.next;
+        if (cur.random!=null){
+            cur.next.random = cur.random.next;
+        }
+        cur = temp;
+    }
+    
+    //list partition
+    RandomListNode dummy = new RandomListNode(0);
+    RandomListNode pre = dummy;
+    
+    cur = head;
+    while (cur != null){
+        pre.next = cur.next;
+        cur.next = cur.next.next;
+        cur = cur.next;
+        pre = pre.next;
+    }
+    return dummy.next;
+    
+    
+}
+    
