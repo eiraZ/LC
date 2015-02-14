@@ -1,0 +1,48 @@
+/*
+Given an array of strings, return all groups of strings that are anagrams.
+
+Note: All inputs will be in lower-case.
+
+Solution: sort, and store in hashmap
+*/
+
+public List<String> anagrams(String[] strs) {
+    List<String> res = new ArrayList<String>();
+    if(strs.length == 0) return res;
+    
+    HashMap<String, List<String>> map = new HashMap<String, List<String>>();
+    
+    for (int i = 0; i < strs.length; i++){
+        char[] ch = strs[i].toCharArray();
+        Arrays.sort(ch);
+        if (map.containsKey(ch)){
+            map.get(ch).add(strs[i]);
+        }else{
+            List<String> ele = new ArrayList<String>();
+            ele.add(strs[i]);
+            map.put(ch, ele);
+        }
+    }
+    Iterator<List<String>> iter = map.values().iterator();
+    while (iter.hasNext()){
+        List<String> value = iter.next();
+        if(value.size() > 1){
+            res.addAll(value);
+        }
+    }
+    
+    
+    /*
+    Iterator<Map.Entry<String, List<String>>> iter = map.entrySet().iterator();
+    while(iter.hasNext()){
+        Map.Entry<String, List<String>> entry = iter.next();
+        List<String> value = entry.getValue();
+        if(value.size() > 1){
+            res.addAll(value);
+        }
+        
+    }
+    */
+    
+    return res;
+}
