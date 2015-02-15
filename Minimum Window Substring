@@ -13,6 +13,8 @@ If there are multiple such windows, you are guaranteed that there will always be
 
 Solution: (1) int[256] to record # of appearance in T.
           (2) search in S. if we found a window, update left bound.
+          
+          if current character is what we need, compare with need, then simply add to found, check left bound
 */
 
 public String minWindow(String S, String T) {
