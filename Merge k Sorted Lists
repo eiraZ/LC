@@ -1,0 +1,56 @@
+/*
+Merge k sorted linked lists and return it as one sorted list. Analyze and describe its complexity.
+
+Solution: Divide and Conquer. k--> 2-->merge
+*/
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+ 
+ public ListNode mergeKLists(List<ListNode> lists) {
+    if (lists.size() == 0 ) return null;
+    return helper(lists, 0, lists.size()-1);
+ }
+ 
+ private ListNode helper(List<ListNode> lists, int start, int end){
+        if(start > end) return null;
+        if(start == end) return lists.get(start);
+        int mid = (start+end)/2;
+        ListNode left = helper(lists, start, mid);
+        ListNode right = helper(lists, mid+1, end);
+        return merge(left, right);
+ }
+ private ListNode merge(ListNode l1, ListNode l2){
+        if(l2 ==null) return l1;
+        ListNode dummy = new ListNode(0);
+        dummy.next = l1;
+        ListNode pre = dummy;
+        ListNode cur1 = l1;
+        ListNode cur2 = l2;
+        
+        while (cur1 != null && cur2 != null){
+            if(cur1.val <= cur2.val){
+                cur1 = cur1.next;
+                pre = pre.next;
+            }else{
+                ListNode temp = cur1;
+                pre.next = cur2;
+                cur2 = cur2.next;
+                pre = pre.next;
+                pre.next = temp;
+            }
+        }
+        if (cur1==null){
+            pre.next = cur2;
+        }
+        return dummy.next;
+ }
