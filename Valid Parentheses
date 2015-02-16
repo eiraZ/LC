@@ -1,0 +1,32 @@
+/*
+Given a string containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+
+The brackets must close in the correct order, "()" and "()[]{}" are all valid but "(]" and "([)]" are not.
+
+Solution: stack.
+          use hashmap to store valid pairs
+*/
+public boolean isValid(String s) {
+    if (s.length() == 0) return true;
+    HashMap<Character, Character> map = new HashMap<Character, Character>();
+    map.put('(', ')');
+    map.put('[', ']');
+    map.put('{', '}');
+    
+    Stack<Character> stack = new Stack<Character>();
+    for (int i = 0; i < s.length(); i++){
+        if (map.containsKey(s.charAt(i))){
+            stack.push(s.charAt(i));
+        }else{
+            if (map.containsValue(s.charAt(i))){
+                if(stack.empty()) return false;
+                char c = stack.pop();
+                if(map.get(c) != s.charAt(i)) return false;
+                
+            }else{
+                return false;
+            }
+        }
+    }
+    return stack.empty();
+}
