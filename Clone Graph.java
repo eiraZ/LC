@@ -70,7 +70,6 @@ Solution: BFS: level by level. visited node!!!!!!!
   public UndirectedGraphNode cloneGraph_DFS(UndirectedGraphNode node) {
         if (node == null) return null;
         HashMap<UndirectedGraphNode, UndirectedGraphNode> map = new HashMap<UndirectedGraphNode, UndirectedGraphNode>();
-        map.put(node, new UndirectedGraphNode(node.label));
         
         clone(node, map);
         return map.get(node);
