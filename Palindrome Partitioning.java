@@ -10,11 +10,14 @@ Return
     ["aa","b"],
     ["a","a","b"]
   ]
-  Solution: DFS
+  Solution: 1. DFS
         substring -> check -> yes: next
                             no : <--
         
         or we can get a palindrome dictionary first: dic[start][end] is a palindrome or not
+        2. DP + HashMap. HashMap<Integer, List<String>> map . Key: from ith char value: palindrome list from ith char
+          palindrome always exists starting from every character
+        
 */
 public List<List<String>> partition(String s) {
     List<List<String>> res = new ArrayList<List<String>>();
@@ -93,3 +96,38 @@ private boolean[][] palinDict(String str){
     }
     return res;
 }
+
+
+//----------------------------------------------------------------------------
+    public List<List<String>> partitionMap(String s) {
+        List<List<String>> res = new ArrayList<List<String>>();
+        if (s.length() == 0) return res;
+        Map<Integer, List<List<String>>> map = new HashMap<Integer, List<List<String>>>();
+    
+        boolean[][] dict = new boolean[s.length()][s.length()];
+    
+        int len = s.length();
+        for (int i = len - 1; i>=0; i--){
+            List<List<String>> ipalin = new ArrayList<List<String>>();
+            for (int j = i; j < len; j++){
+                if (s.charAt(i) == s.charAt(j) &&( j-i <= 2 || dict[i+1][j-1])){
+                    dict[i][j] = true;
+                    String p = s.substring(i, j+1);
+                    if (map.containsKey(j+1)){
+                        for(List<String> list: map.get(j+1)){
+                            List<String> temp = new ArrayList<String>(list);
+                            temp.add(0, p);
+                            ipalin.add(temp);
+                        }
+                    }else{
+                        List<String> list = new ArrayList<String>();
+                        list.add(0, p);
+                        ipalin.add(list);
+                    }
+                
+                }
+            }
+            map.put(i, ipalin);
+        }
+        return map.get(0);
+    }
