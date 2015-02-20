@@ -38,6 +38,9 @@ Given two strings s1 and s2 of the same length, determine if s2 is a scrambled s
 
 Solution: 1. Recursion
           2. DP
+          //cut point: left part|right part.
+          //s1.leftpart is scramble of s2.leftpart && s1.rightpart is scramble of s2.rightpart; 
+            OR: s1.leftpart is scramble of s2.rightpart && s1.rightpart is scramble of s2.leftpart
 */
 public boolean isScrambleRecursion(String s1, String s2) {
     //if (s1.length() == 0) return s2.length() == 0;
