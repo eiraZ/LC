@@ -1,8 +1,9 @@
 /*
 Given a singly linked list where elements are sorted in ascending order, convert it to a height balanced BST.
 
-Solution: 1. Binary search
-          2. Bottom-up
+Solution: Binary search
+          1. Preorder. root, root.left, root.right
+          2. Inorder: divide and conquer. Recursion
 */
 /**
  * Definition for singly-linked list.
@@ -21,7 +22,7 @@ Solution: 1. Binary search
  *     TreeNode(int x) { val = x; }
  * }
  */
-public TreeNode sortedListToBST(ListNode head) {
+public TreeNode sortedListToBSTPre(ListNode head) {
 
     if (head == null) return null;
     if (head.next == null) return new TreeNode(head.val);
@@ -43,8 +44,33 @@ public TreeNode sortedListToBST(ListNode head) {
     
     pre.next = null;
     
-    root.left = sortedListToBST(dummy.next);
-    root.right = sortedListToBST(l2);
+    root.left = sortedListToBSTPre(dummy.next);
+    root.right = sortedListToBSTPre(l2);
+    
+    return root;
+}
+
+public TreeNode sortedListToBSTInorder(ListNode head) {
+        if (head == null)   return null;
+        int count = 0;
+        ListNode cur = head;
+        while (cur != null){
+            count++;
+            cur = cur.next;
+        }
+        List<ListNode> res = new ArrayList<ListNode>();
+        res.add(head);
+        return helper(head, 0, count-1, res);
+}
+private TreeNode helper(int left, int right, List<ListNode> res){
+    if (left > right)   return null;
+    int mid = (left + right)/2;
+    
+    TreeNode leftNode = helper(left, mid-1, res);
+    TreeNode root = new TreeNode(res.get(0).val);
+    root.left = leftNode;
+    res.set(0, res.get(0).next);
+    root.right  = helper(mid+1, right, res);
     
     return root;
 }
