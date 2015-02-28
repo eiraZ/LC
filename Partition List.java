@@ -22,7 +22,7 @@ Solution: 2 lists and connect
  * }
  */
 
-    public ListNode partition(ListNode head, int x) {
+    public ListNode partition1(ListNode head, int x) {
         if (head == null)   return null;
         ListNode dummy1 = new ListNode(0);
         ListNode dummy2 = new ListNode(0);
@@ -46,6 +46,34 @@ Solution: 2 lists and connect
             }
         }
         
+        pre1.next = dummy2.next;
+        return dummy1.next;
+    }
+    
+    public ListNode partition2(ListNode head, int x) {
+        if(head==null){
+            return head;
+        }
+        ListNode dummy1 = new ListNode(0);
+        ListNode pre1 = dummy1;
+        
+        ListNode dummy2 = new ListNode(0);
+        ListNode pre2 = dummy2;
+        
+        ListNode cur = head;
+        //ListNode pre = dummy1;
+        while (cur != null){
+            ListNode temp = cur.next;
+            cur.next = null;
+            if (cur.val < x){
+                pre1.next = cur;
+                pre1 = pre1.next;
+            }else{
+                pre2.next = cur;
+                pre2 = pre2.next;
+            }
+            cur = temp;
+        }
         pre1.next = dummy2.next;
         return dummy1.next;
     }
