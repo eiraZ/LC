@@ -4,7 +4,7 @@ Returns the index of the first occurrence of needle in haystack, or -1 if needle
 
 Solution: (1) Sliding window: two pointers, one is for start, the other is the runner. 
           (2) Rolling hash: 
-                    code = c0 * a^(k-1) + c1* a^(k-2) + c2 * a^(k-3)+... + c(k-1)* a^0.
+                    code = c0 * a^(k-1) + c1* a^(k-2) + c2 * a^(k-3)+... + c(k-1)* a^0. a should be a prime
                     codeNext = (code - c0 * a^(k-1)) * a + c(k) * a^0
                     code == codeNext or not.
                     if this code overflows, try to use mod n, where n is a big prime. This will generate same hash code. 
