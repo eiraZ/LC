@@ -19,6 +19,10 @@ If S = [1,2,3], a solution is:
 ]
 Solution: (1) recursion. DFS
           (2) iteration.
+          (3) Bit manipulation: we have 2^(S.length) subsets in total. e.g.
+             S = {1, 2, 3};
+             0th = {}; 001 -> {3}; 010 ->{2}; 011->{2,3}. 
+             bit "1": yes; bit 0: no.
 */
 public List<List<Integer>> subsets_recursion(int[] S) {
     List<List<Integer>> res = new ArrayList<List<Integer>>();
@@ -56,4 +60,28 @@ public List<List<Integer>> subsets_iteration(int[] S){
         }
     }
     return res;
+}
+
+public List<List<Integer>> subsetsBit(int[] S){
+  List<List<Integer>> res = new ArrayList<List<Integer>>();
+  if (S.length == 0) return res;
+  
+  int n = S.length;
+  int total = 1 << n;
+  
+  for (int i = 0; i< total; i++){
+      List<Integer> ele = new ArrayList<Integer>();
+      int pos = n - 1;
+      int cur = i;
+      while (cur > 0){
+          if ( (cur & 1) == 1){
+              ele.add(S[pos]);
+          }
+          cur = cur>>1;
+          pos--;
+      }
+      Collections.sort(ele);
+      res.add(ele);
+  }
+  return res;
 }
