@@ -16,6 +16,9 @@ word = "SEE", -> returns true,
 word = "ABCB", -> returns false.
 
 Solution: DFS
+find a particular path exists. 
+BFS is not a good choice because this is not a shortest path finding problem. Once we found a "wrong" path, we have to backtrace
+to the divergent point.
 */
 public boolean exist(char[][] board, String word) {
     if (word.length() == 0) return true; 
