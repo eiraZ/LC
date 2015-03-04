@@ -8,6 +8,8 @@ Given [0,1,0,2,1,0,1,3,2,1,2,1], return 6.
 Solution: 
           (1) find left bar, right bar in two scans. barHeight = Math.min(leftBar, rightBar) Time: O(n)
           (2) greedy algo: 2 pointers: one is at the beginning, one is at the end. always move the lower bar. 
+          (3) stack: containing the index of decreasing height. pop once current height is larger the height in stack, 
+                    height: Math.min(A[stack.peek()], A[i])
 */
 public int trap_1(int[] A) {
     if (A.length == 0) return 0;
@@ -53,5 +55,24 @@ public int trap_greedy(int[] A) {
         }
     }
     
+    return res;
+}
+
+public int trap_stack(int[] A) {
+    if (A.length == 0 ) return 0;
+    
+    Stack<Integer> stack = new Stack<Integer>();
+    int i = 0;
+    int res = 0;
+    while (i < A.length){
+        if (stack.isEmpty() || A[i] < A[stack.peek()]){
+            stack.push(i);
+            i++;
+        }else{
+            int idx = stack.pop();
+            int container = (stack.isEmpty())? 0: (Math.min(A[i], A[stack.peek()]) - A[idx]) *(i - stack.peek() - 1);
+            res += container;
+        }
+    }
     return res;
 }
