@@ -61,6 +61,7 @@ public List<String> wordBreakDFS(String s, Set<String> dict) {
         for (int i = 0; i<= s.length(); i++){
             path.put(i, new ArrayList<String>());
         }
+        //s.length() == 0
         path.get(0).add("");
         int n = s.length();
         for (int len = 1; len <= n; len++){
