@@ -18,9 +18,31 @@ isMatch("aa", "a*") → true
 isMatch("ab", "?*") → true
 isMatch("aab", "c*a*b") → false
 
-Solution: DP. boolean[pattern.length() +1][s.length() + 1] subproblem: pattern[0, i] matches s or not [0, j]
+Solution: (1) Recursion.
+               if p.charAt(0) != '*', 3 possibilities:
+                  1. p.charAt(0) == s.charAt(0) isMatch(s.substring(1), p.substring(1));
+                  2. p.charAt(0) == '?' isMatch(s.substring(1), p.substring(1))
+                  3. p.charAt(0) != '?' && p.charAt(0) != s.charAt(0) false;
+               if p.charAt(0) =='*', then we can consider: 
+                1. '*' represents an empty string: 
+                    isMatch(s, p.substring(1))
+                2. '*' represents current s.charAt(0) and keep this '*'(maybe we'll use it later)
+                    isMatch(s.substring(1), p)
+        (2)DP. boolean[pattern.length() +1][s.length() + 1] subproblem: pattern[0, i] matches s or not [0, j]
 */
-public boolean isMatch(String s, String p){
+public boolean isMatchRecursion(String s, String p){
+    public boolean isMatch(String s, String p) {
+        if (s == null && p == null)  return false;
+        int M = s.length(), N = p.length();
+        if (M == 0) return N==0;
+        if (N == 0) return false;
+        
+        if (s.charAt(0) == p.charAt(0) || p.charAt(0) == '?'){
+            return isMatchRecursion(s.substring(1), p.substring(1));
+        }
+        return p.charAt(0) == '*' && (isMatchRecursion(s, p.substring(1)) || isMatchRecursion(s.substring(1), p));
+    }
+public boolean isMatchDP(String s, String p){
     if( p.length() == 0) return s.length() == 0;
     if (s.length() == 0) return false;
     
