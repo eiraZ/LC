@@ -11,9 +11,11 @@ dict = ["cat", "cats", "and", "sand", "dog"].
 A solution is ["cats and dog", "cat sand dog"].
 
 Solution: first, check if current string is breakable(DP). subproblem: from (0, i), this string is breakable.
-          then DFS for every solution.
+          then (1)DFS for every solution.
+               (2)Memo string in a map: Map<Integer, ArrayList<String>> path. 
+                  key: end index. value: list of string that can be breakable between (0, key)
 */
-public List<String> wordBreak(String s, Set<String> dict) {
+public List<String> wordBreakDFS(String s, Set<String> dict) {
         List<String> res = new ArrayList<String>();
         if(s==null||s.length()==0){
             return res;
@@ -39,6 +41,44 @@ public List<String> wordBreak(String s, Set<String> dict) {
                 }
             }
 
+        }
+    }
+    
+    public List<String> wordBreakMemo(String s, Set<String> dict) {
+        List<String> res = new ArrayList<String>();
+        if(s==null||s.length()==0){
+            return res;
+        }
+        if (!isBreakable(s, dict))  return res;
+        Map<Integer, List<String>> path = new HashMap<Integer, List<String>>();
+        memoHelper(path, s, dict);
+        
+        return path.get(s.length());
+        
+        
+    }
+    private void memoHelper(Map<Integer, List<String>> path, String s, Set<String> dict){
+        for (int i = 0; i<= s.length(); i++){
+            path.put(i, new ArrayList<String>());
+        }
+        path.get(0).add("");
+        int n = s.length();
+        for (int len = 1; len <= n; len++){
+            String temp = s.substring(0, len);
+            if (dict.contains(temp)){
+                path.get(len).add(temp);
+            }
+            for (int cut = 1; cut < len; cut++){
+                String sub = s.substring(cut, len);
+                if (dict.contains(sub)){
+                    //pad with path.get(cut) as previous words
+                    for (String pre: path.get(cut)){
+                        String current = pre + " " + sub;
+                        path.get(len).add(current);
+                    }
+                }
+            }
+            
         }
     }
     
