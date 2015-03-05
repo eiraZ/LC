@@ -35,7 +35,7 @@ public boolean isMatch(String s, String p){
             }
         }else{
             res[i][0] = res[i-1][0];
-            int j = =;
+            int j = 0;
             while (j <= s.length() && !res[i-1][j]){
                 j++;
             }
