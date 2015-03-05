@@ -29,6 +29,7 @@ Solution: (1) Recursion.
                 2. '*' represents current s.charAt(0) and keep this '*'(maybe we'll use it later)
                     isMatch(s.substring(1), p)
         (2)DP. boolean[pattern.length() +1][s.length() + 1] subproblem: pattern[0, i] matches s or not [0, j]
+        (3)2 pointers. maintain 2 pointers for backup: sback: last match index in s, pback: last match index in p.
 */
 public boolean isMatchRecursion(String s, String p){
     public boolean isMatch(String s, String p) {
@@ -96,5 +97,34 @@ public boolean isMatch_DP2(String s, String p){
         
     }
     return res[s.length()];
+}
+
+public boolean isMatch(String s, String p) {
+        /* 2 pointers*/
+        if (s.length() == 0 && p.length() == 0) return true;
+        int sback = -1, pback = -1, i = 0, j = 0;
+        int M = s.length(), N = p.length();
+        while (i < M){
+            if (j < N && (s.charAt(i) == p.charAt(j) || p.charAt(j) == '?')){
+                i++;
+                j++;
+            }else if( j < N && p.charAt(j) =='*'){
+               //ignore duplicate '*' until p.charAt(j) != '*'
+                while (j < N && p.charAt(j) == '*'){
+                    j++;
+                }
+                if (j == N)     return true;
+                sback = i;
+                pback = j;
+            }else{
+                //mismatch happens, 
+                //if we have backup, apply '*' for replacement. that is s.charAt(i) can be represented by '*'
+                if (sback == -1)    return false;
+                i = ++sback;
+                j = pback;
+            }
+        }
+        while (j < N && p.charAt(j) =='*') j++;
+        return j==N;
 }
     
