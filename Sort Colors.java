@@ -40,7 +40,7 @@ Solution: (1) 2 pointers. one is for counting 0, the other is for counting 2. tr
         }
     }
     
-    public void sortColorsLRC(int[] A) {
+    public void sortColors_similar(int[] A) {
         int l = 0, r = 0, c = 0;
         int n = A.length;
         while (c < n){
