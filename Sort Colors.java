@@ -7,6 +7,14 @@ Here, we will use the integers 0, 1, and 2 to represent the color red, white, an
 Note:
 You are not suppose to use the library's sort function for this problem.
 Solution: (1) 2 pointers. one is for counting 0, the other is for counting 2. traverse once
+              similar thoughts: 
+                    0: [0, l); 
+                    1: [l, r); 
+                    2: [r, c)
+                    now we want to sort [c, n) in order.
+                    initial: l = 0, r = 0, c = 0;
+                    constraints: l <=r <=c 
+                    stop: c==n
           (2) counting sort. we know the range is [0, 2], build a 3-length array for counting. traverse twice.
 */
 
@@ -31,6 +39,36 @@ Solution: (1) 2 pointers. one is for counting 0, the other is for counting 2. tr
             }
         }
     }
+    
+    public void sortColorsLRC(int[] A) {
+        int l = 0, r = 0, c = 0;
+        int n = A.length;
+        while (c < n){
+            if (A[c] == 2) c++;
+            else if (A[c] == 1){
+                swap(A, r, c);
+                r++;
+                if(c < r){
+                    c = r;
+                }
+            }else{
+                swap(A, l, c);
+                l++;
+                if(c < l){
+                    c = l;
+                }
+                if (r < l){
+                    r = l;
+                }
+            }
+        }
+    }
+    private void swap(int[] A, int i, int j){
+        int temp = A[i];
+        A[i] = A[j];
+        A[j] = temp;
+    }
+    
     public void sortColors_counting(int[] A) {
         int[] bucket = new int[3];
         for (int i = 0; i< A.length; i++){
