@@ -22,7 +22,7 @@ The flattened tree should look like:
             \
              6
 
-Solution: preorder traversal.1. Iteration 2. Recursion
+Solution: preorder traversal.1. Iteration 2. Recursion. 2.2: connect last element (tail) with left node
 */
 /**
  * Definition for binary tree
@@ -38,19 +38,39 @@ Solution: preorder traversal.1. Iteration 2. Recursion
     Stack<TreeNode> stack = new Stack<TreeNode>();
     TreeNode cur = root;
     while (cur != null){
-        if (cur.right != null){
-            stack.push(cur.right);
-        }
-        if (cur.left != null){
-            cur.right = cur.left;
-            cur.left = null;
-        }else{
-            if (!stack.empty()){
-                cur.right = stack.pop();
-            }
-        }
-        cur = cur.right;
+         if (cur.right != null){
+             stack.push(cur.right);
+         }
+         if (cur.left != null){
+             stack.push(cur.left);
+             cur.left = null;
+         }
+         cur.right = stack.isEmpty()? null: stack.pop();
+         cur = cur.right;
+//        if (cur.right != null){
+//             stack.push(cur.right);
+//        }
+//        if (cur.left != null){
+//             cur.right = cur.left;
+//             cur.left = null;
+//        }else{
+//             if (!stack.empty()){
+//                 cur.right = stack.pop();
+//             }
+//        }
+//        cur = cur.right;
     }
+ }
+ public void flatten_re(TreeNode root){
+         if (root == null) return;
+         flattenHelper2(root, null);
+ }
+ private TreeNode flattenHelper2(TreeNode root, TreeNode tail){
+         if (root == null) return tail;
+         TreeNode curTail = flattenHelper2(root.right, tail);
+         root.right = flattenHelper2(root.left, tail);
+         root.left = null;
+         return root;
  }
  
  public void flatten_re(TreeNode root) {
