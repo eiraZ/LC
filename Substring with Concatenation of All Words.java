@@ -19,7 +19,7 @@ public List<Integer> findSubstring(String S, String[] L) {
             contained: need, found
        
        */
-       /*
+       
         List<Integer> res = new ArrayList<Integer>();
         if(S==null||S.length()==0||L==null||L.length==0){
             return res;
@@ -65,8 +65,9 @@ public List<Integer> findSubstring(String S, String[] L) {
             }
         }
         return res;
+        
     }
-
+/*
 public List<Integer> findSubstring(String S, String[] L) {
     List<Integer> res = new ArrayList<Integer>();
     if (S.length() == 0 || L.length == 0) return res;
@@ -102,6 +103,7 @@ public List<Integer> findSubstring(String S, String[] L) {
     }
     return res;
 }
+*/
 
 
 //  TLE
