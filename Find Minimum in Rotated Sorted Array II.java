@@ -18,6 +18,11 @@ public int findMin_leftAsMin(int[] num) {
     if (num == null || num.length == 0 ) return Integer.MIN_VALUE;
     int left = 0;
     int right = num.length - 1;
+    //skip num[left]==num[right]
+    while (left <=right && num[left]==num[right]){
+        left++;
+    }
+    if(left == num.length)  return num[0];
     
     while ( left <= right && num[left] > num[right]){
         int mid = (left+right)/2;
