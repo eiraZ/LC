@@ -6,6 +6,7 @@ You may assume that the array is non-empty and the majority element always exist
 Solution: (1) Moore voting algorithm. assume there always exists a majority element.
           (2) Bit manipulation. compare it one-bit by one-bit. # of one or zero
           (3) hashtable
+          (4) Quick selection. target must be the median in this array: find kth element. O(n)
 */
 public int majorityElement_Moore(int[] num) {
     // res: target, count: # of times for current target. Assume majority element always exists 
@@ -68,3 +69,44 @@ public int majorityElement(int[] num){
         return res;
     
 }
+
+    public int majorityElementQS(int[] num) {
+        int len = num.length;
+        return findKth(num, 0, num.length-1, len/2);
+    }
+    
+    private int findKth(int[] num, int left, int right, int k){
+        if(left == right)   return num[left];
+        while (left <= right){
+            int index = partition(num, left, right);
+            if (k == index){
+                return num[k];
+            }else if(index < k){
+                left = index + 1;
+            }else{
+                right = index - 1;
+            }
+        }
+        return -1;
+    }
+    
+    private int partition(int[] num, int left, int right){
+        if(left > right)    return -1;
+        int pivot = num[(left+right)/2];
+        swap(num, (left+right)/2, right);
+        int start = left;
+        for (int i = left; i < right; i++){
+            if(num[i] < pivot){
+                swap(num, i, start);
+                start++;
+            }
+        }
+        swap(num, start, right);
+        return start;
+    }
+    
+    private void swap(int[] num, int left, int right){
+        int temp = num[right];
+        num[right] = num[left];
+        num[left] = temp;
+    }
