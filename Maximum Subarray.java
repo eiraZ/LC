@@ -26,19 +26,24 @@ Solution: (1) brute force: find the maximum subarray one by one. O(n^2)
  
  public int maxSubArray_DC(int[] A){
     if (A.length == 0) return Integer.MIN_VALUE;
-    return maxSubArrayHelper(A, 0, A.length - 1, Integer.MIN_VALUE);
+    int[] maxSum = new int[1];
+    maxSum[0] = Integer.MIN_VALUE:
+    return maxSubArrayHelper(A, 0, A.length - 1, maxSum);
  }
  
- private int maxSubArrayHelper(int[] A, int left, int right, int maxSum){
+ private int maxSubArrayHelper(int[] A, int left, int right, int[] maxSum){
     if (left > right ) return Integer.MIN_VALUE;
     if (left == right) return A[left];
     
     int mid = (left + right)/2;
+    
     int leftMaxSum = maxSubArrayHelper(A, left, mid-1, maxSum);
+    maxSum[0] = Math.max(leftMaxSum, maxSum[0]);
+    
     int rightMaxSum = maxSubArrayHelper(A, mid+1, right, maxSum);
-    
-    maxSum = Math.max(maxSum, Math.max(leftMaxSum, rightMaxSum));
-    
+    maxSum[0] = Math.max(rightMaxSum, maxSum[0]);
+
+    //cross A[mid]. find the longest subarray[i, j], where i <=k < =j such that sum is max.
     int sum = 0;
     int midLeftMax = 0;
     for (int i = mid-1; i>=left; i--){
@@ -53,8 +58,8 @@ Solution: (1) brute force: find the maximum subarray one by one. O(n^2)
         midRightMax = Math.max(midRightMax, sum);
     }
     
-    int maxSum = Math.max(maxSum, midLeftMax + A[mid] + midRightMax);
-    return maxSum;
+    maxSum[0] = Math.max(maxSum[0], midLeftMax + A[mid] + midRightMax);
+    return maxSum[0];
  }
  
  public int maxSubArray_DP(int[] A){
