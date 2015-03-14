@@ -11,7 +11,17 @@ Given s = "AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT",
 Return:
 ["AAAAACCCCC", "CCCCCAAAAA"].
 
-Solution: bit manipulation + rolling hash
+Solution: 
+          brute force: substring 10 characters at a time, and put this current substring in our memo such as hashset;
+                       and compare. let n = s.length() >10, we'll cut and compare for (n-10 +1) times, O(10*(n-10+1)).
+                       
+          Improvement: we can find that we just 'delete' the character in the head and add another to the tail. Can we
+                       use rolling hash? String -> Integer. if hash code is the same, we'll compare it one by one.
+                       Can we do it better? use exact number to represent this sequence. That is bit-sequence.  
+                       Since the sequence matters, and we just have 4 different chars. 2-bit for each char, sequence's length
+                       is 10. We just need 20 bits to deal with a substring.
+                       
+          bit manipulation: use bit-sequence to represent a string
           00: 'A'; 01: 'C'; 10: 'G'; 11: 'T'
           10-letter long: we can use 20 bit to represent this sequence 
           map: visitedMap
@@ -63,7 +73,7 @@ public List<String> findRepeatedDnaSequences(String s) {
 
 private String convert(int seq){
     StringBuilder sb = new StringBuilder();
-    
+   
     for (int i = 0; i < 10; i++){
         int temp = seq & 3;
         if(temp == 0){
