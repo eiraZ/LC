@@ -12,6 +12,10 @@ return [3,2,1].
 
 Note: Recursive solution is trivial, could you do it iteratively?
 
+1. iteration
+2. recursion
+3. morris. we use additional data structure for reverse...
+
 */
 
 /**
@@ -60,3 +64,43 @@ public List<Integer> postorderTraversal_iter(TreeNode root) {
     }
     return res;
 }
+
+public List<Integer> postorderTraversalMorris(TreeNode root) {
+        //morris
+        List<Integer> res = new ArrayList<Integer>();
+        TreeNode dummy = new TreeNode(0);
+        dummy.left = root;
+        
+        TreeNode cur = dummy;
+        TreeNode pre = null;
+        
+        while (cur != null){
+            if (cur.left == null){
+                cur = cur.right;
+            }else{
+                pre = cur.left;
+                while (pre.right != null && pre.right != cur){
+                    pre = pre.right;
+                }
+                if (pre.right == null){
+                    pre.right = cur;
+                    cur = cur.left;
+                }else{
+                    Stack<Integer> stack = new Stack<Integer>();
+                    TreeNode temp = cur.left;
+                    while (temp != cur){
+                        stack.push(temp.val);
+                        temp = temp.right;
+                    }
+                    while (!stack.isEmpty()){
+                        res.add(stack.pop());
+                    }
+                    
+                    pre.right = null;
+                    cur = cur.right;
+                }
+            }
+        }
+        return res;
+        
+    }
