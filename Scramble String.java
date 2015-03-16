@@ -105,3 +105,33 @@ public boolean isScrambleDP(String s1, String s2) {
     }
     return res[total][0][0];
 }
+
+public boolean isScrambleDP_if(String s1, String s2) {
+        
+    if (s1.length() == 0)   return s2.length()==0;
+    if (s1.length() != s2.length())     return false;
+    if (s1.equals(s2))  return true;
+    
+    int total = s1.length();
+    boolean[][][] res = new boolean[total + 1][total][total];
+    
+    for (int len = 1; len <= total; len++){
+        for(int start1 = 0; start1 <= total - len; start1++){
+            for (int start2 = 0; start2 <= total - len; start2++){
+                if (s1.substring(start1, start1+len).equals(s2.substring(start2, start2+len))){
+                    res[len][start1][start2] = true;
+                }else{
+                    for (int cut = 1; cut < len; cut++){
+                        if((res[cut][start1][start2] && res[len-cut][start1+cut][start2+cut])
+                            || (res[cut][start1][start2+len-cut] && res[len-cut][start1+cut][start2])){
+                            res[len][start1][start2] = true;
+                            break;
+                        }
+                        
+                    }
+                }
+            }
+        }
+    }
+    return res[total][0][0];
+}
