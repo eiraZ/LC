@@ -3,37 +3,37 @@ Given an array of strings, return all groups of strings that are anagrams.
 
 Note: All inputs will be in lower-case.
 
-Solution: 1. sort, and store in hashmap: assume input with length n, average length of a string is m: O(nmlgm)
+Solution: 1. sort, and store in hashmap: assume input with length n, average length of a string is m: O(nmlgm)  !!!valueOf. toString
           2. count # of a char appearance in a string, and compare one by one. O(m*n^2). In LC, TLE
           
           when n > lgm, choose first option. else, choose the second one.
 */
 
 public List<String> anagrams1(String[] strs) {
-    List<String> res = new ArrayList<String>();
-    if(strs.length == 0) return res;
-    
-    HashMap<String, List<String>> map = new HashMap<String, List<String>>();
-    
-    for (int i = 0; i < strs.length; i++){
-        char[] ch = strs[i].toCharArray();
-        Arrays.sort(ch);
-        if (map.containsKey(ch)){
-            map.get(ch).add(strs[i]);
-        }else{
-            List<String> ele = new ArrayList<String>();
-            ele.add(strs[i]);
-            map.put(ch, ele);
+        List<String> res = new ArrayList<>();
+        if(strs.length == 0)    return res;
+        Map<String, List<String>> map = new HashMap<String, List<String>>();
+        for(int i= 0; i < strs.length; i++){
+            char[] ch = strs[i].toCharArray();
+            Arrays.sort(ch);
+            String id = String.valueOf(ch);
+            
+            if(!map.containsKey(id)){
+                List<String> list = new ArrayList<>();
+                list.add(strs[i]);
+                map.put(id, list);
+            }else{
+                (map.get(id)).add(strs[i]);
+            }
+            
         }
-    }
-    Iterator<List<String>> iter = map.values().iterator();
-    while (iter.hasNext()){
-        List<String> value = iter.next();
-        if(value.size() > 1){
-            res.addAll(value);
+
+        for (String key: map.keySet()){
+            if(map.get(key).size()>1){
+                res.addAll(map.get(key));
+            }
+            
         }
-    }
-    
     
     /*
     Iterator<Map.Entry<String, List<String>>> iter = map.entrySet().iterator();
