@@ -8,8 +8,9 @@ Return 0 if the array contains less than 2 elements.
 You may assume all elements in the array are non-negative integers and fit in the 32-bit signed integer range.
 
 Solution: (1) sort and find maximum gap. O(nlogn)
-          (2) bucket sort + drawer theory. 
-          
+          (2) bucket sort + drawer theory. O(n)
+              we really care about "gap", bucket sort provides a fix-size of bucket. this fix-size is "gap". we can make a 
+              bucket size as our average gap. maximum gap > bucket size.
           /*drawer theory: we have (n+1) drawers, and put n numbers in these drawers, there exists at least an empty drawer.
         since the drawer size is the same, we can guarantee that the max gap is between an empty drawer
             find maxVal and minVal,
@@ -45,43 +46,40 @@ public int maximumGap2(int[] num){
     }
     if (num.length < 2) return 0;
     
-    int max = num[0];
-    int min = num[0];
-    
-    for (int i = 0; i<num.length; i++){
-        max = Math.max(num[i], max);
-        min = Math.min(num[i], min);
-    }
-    
-    int averGap = (int)(Long.valueOf(max - min + 1)/Long.valueOf(num.length + 1));
-    
-    Node[] buckets = new Node[num.length + 1];
-    
-    for (int i = 0; i < buckets.length; i++){
-        buckets[i] = new Node();
-    }
-    //buckets[0].high = min;
-    //buckets[num.length].low = max;
-    
-    for (int i = 0; i< num.length; i++){
-        int index = (num[i] - min)/averGap;
-        if (buckets[index].low == -1){
-            buckets[index].low = num[i];
-            buckets[index].hight = num[i];
-        }else{
-            buckets[index].low = Math.min(num[i], buckets[index].low);
-            buckets[index].hight = Math.max(num[i], buckets[index].high);
+ int maxVal = num[0];
+        int minVal = num[0];
+        
+        for (int i = 1; i < num.length; i++){
+            maxVal = Math.max(maxVal, num[i]);
+            minVal = Math.min(minVal, num[i]);
         }
-    }
-    
-    int res = Integer.MIN_VALUE;
-    int pre = buckets[0].high;
-    for (int i = 1; i < buckets.length; i++){
-        if (buckets[i].low!= -1){
-            res = Math.max(buckets[i].low - pre, res);
-            pre = buckets[i].high;
+        
+        //int avgGap = (int)(Long.valueOf(maxVal - minVal + 1)/Long.valueOf(num.length + 1));
+        
+        Node[] nodes = new Node[num.length + 1];
+        for (int i = 0; i < num.length+1; i++){
+            nodes[i] = new Node();
         }
-    }
-    return res;
+        
+        for (int i = 0; i < num.length; i++){
+            //int index = (num[i] - minVal)/avgGap;
+            int index = (int)(Long.valueOf(num[i] - minVal) * Long.valueOf(num.length + 1) /Long.valueOf(maxVal - minVal + 1));
+            if(nodes[index].low == -1){
+                nodes[index].low = num[i];
+                nodes[index].high = num[i];
+            }else{
+                nodes[index].low = Math.min(nodes[index].low, num[i]);
+                nodes[index].high = Math.max(nodes[index].high, num[i]);
+            }
+        }
+        int res = Integer.MIN_VALUE;
+        int pre = nodes[0].high;
+        for (int i = 1; i<=num.length; i++){
+            if(nodes[i].low!= -1){
+                res = Math.max(res, nodes[i].low - pre);
+                pre = nodes[i].high;
+            }
+        }
+        return res;
     
 }
