@@ -26,7 +26,7 @@ Solution: find a place we start to insert. merge if necessary.
  * }
  */
  
- public List<Interval> insert(List<Interval> intervals, Interval newInterval) {
+ public List<Interval> insert1(List<Interval> intervals, Interval newInterval) {
     List<Interval> res = new ArrayList<Interval>();
     if(newInterval == null ) return intervals;
     if (intervals == null || intervals.size() ==0 ){
@@ -61,3 +61,33 @@ int index = 0;
     return res;
     
  }
+ 
+ public List<Interval> insert2(List<Interval> intervals, Interval newInterval) {
+        //Given intervals [1,3],[6,9], insert and merge [2,5] in as [1,5],[6,9]
+        List<Interval> res = new ArrayList<Interval>();
+        if(intervals == null ||intervals.size() == 0){
+            res.add(newInterval);
+            return res;
+        }
+        boolean inserted = false;
+        
+        for(Interval in: intervals){
+            if(inserted|| in.end < newInterval.start){
+                res.add(in);
+            }else if(in.start > newInterval.end){
+                res.add(newInterval);
+                res.add(in);
+                inserted = true;
+            }else{
+                newInterval.start = Math.min(in.start, newInterval.start);
+                newInterval.end = Math.max(in.end, newInterval.end);
+            }
+        }
+        if(!inserted){
+            res.add(newInterval);
+        }
+        
+        return res;
+        
+        
+    }
