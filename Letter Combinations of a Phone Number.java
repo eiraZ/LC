@@ -7,8 +7,9 @@ Input:Digit string "23"
 Output: ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
 Solution: 1. DFS. digits.length() == m. every digit contains 4 chars at most. Time: O(4^m)
           2. Memorization. from back to the front. Time: O(4^m).
+          3. BFS. from beginning to the end. similar with 2
 */
-public List<String> letterCombinations(String digits) {
+public List<String> letterCombinationsDFS(String digits) {
     List<String> res = new ArrayList<String>();
     if (digits == null) return res;
     res.add("");
@@ -62,3 +63,30 @@ public List<String> letterCombinationsMemo(String digits) {
         }
         return combinations.get(0);
 }
+
+    public List<String> letterCombinations(String digits) {
+        if (digits.length() == 0)   return new ArrayList<String>();
+        List<String> parent = new ArrayList<String>();
+        parent.add("");
+        
+        String[] map = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        
+        for (int i = 0; i < digits.length(); i++){
+            String s = map[digits.charAt(i)-'0'];
+            int size = parent.size();
+            List<String> children = new ArrayList<String>();
+            
+            for(int j = 0; j < size; j++){
+                String cur = parent.get(j);
+                for (int k = 0; k < s.length(); k++){
+                    String next = cur + "" + s.charAt(k);
+                    children.add(next);
+                }
+            }
+            parent = children;
+            
+        }
+        return parent;
+    }
+
+
