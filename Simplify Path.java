@@ -49,3 +49,42 @@ public String simplifyPath(String path) {
     }
     return sb.toString();
 }
+
+ public String simplifyPath2(String path) {
+        if(path.length() == 0)  return path;
+        Stack<String> stack = new Stack<>();
+        
+        int i = 0;
+        int len = path.length();
+        while (i < len){
+            while(i < len && path.charAt(i) == '/'){
+                i++;
+            }
+            StringBuilder sb = new StringBuilder();
+            while (i < len && path.charAt(i) != '/'){
+                sb.append(path.charAt(i));
+                i++;
+            }
+            i++;
+            String s = sb.toString();
+            if(s.length() == 0) continue;
+            if(s.equals("."))   continue;
+            else if(s.equals("..")){
+                if (!stack.isEmpty()){
+                    stack.pop();
+                }
+                //else ...
+            }else{
+                stack.push(s);
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        if(stack.isEmpty()) return "/";
+        while(!stack.isEmpty()){
+            String str = stack.pop();
+            sb.insert(0, str);
+            sb.insert(0, '/');
+        }
+        return sb.toString();
+        
+    }
