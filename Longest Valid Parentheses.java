@@ -20,6 +20,10 @@ Solution: (1) Use a stack<Integer> for storing opening brackets, and integer is 
                           (res[index] acts like a bridge to connect parentheses)
                           be careful the bound!
               Time: O(n) Space: O(n)
+          (3) traverse twice. Time: O(n). Space: O(1).
+              left -> right: check longest valid parenthese starting with '('
+              right -> left: check longest valid parenthese ending with ')'
+              e.g. ((). left->right, count is always > 0, res == 0. right -> left, res = 2.
 
 */
 public int longestValidParentheses_stack(String s) {
@@ -64,3 +68,38 @@ public int longestValidParentheses_DP(String s) {
     }
     return res[0];
 }
+
+public int longestValidParentheses3(String s) {
+        int res = 0;
+        int count = 0, val = 0;
+        int len = s.length();
+        for (int i = 0; i < len; i++){
+            count += s.charAt(i) == '(' ? 1: -1;
+            if(count < 0){
+                count = 0;
+                val = 0;
+                continue;
+            }
+            val += s.charAt(i) == '('? 0 : 2;
+            if (count == 0){
+                res = Math.max(res, val);
+            }
+        }
+        
+        count = 0;
+        val = 0;
+        for (int i = len - 1; i >= 0; i--){
+            count += s.charAt(i) == ')'? 1 : -1;
+            if (count < 0){
+                count = 0;
+                val = 0;
+                continue;
+            }
+            val += s.charAt(i) == ')'? 0: 2;
+            if (count == 0){
+                res = Math.max(res, val);
+            }
+        }
+        return res;
+        
+    }
