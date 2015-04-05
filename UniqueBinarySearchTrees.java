@@ -10,15 +10,31 @@ Given n = 3, there are a total of 5 unique BST's.
     /     /       \                 \
    2     1         2                 3
  
- Solution: DP. Subproblem: # of unique bst with i nodes. 
+ Solution:  think from top to bottom. if we want to find # of BST with n nodes, consider root, # of left substrees and # of 
+            right subtrees. left subtree: left subroot: 1 -> root - 1, consider null case. TLE
+            DP. Subproblem: # of unique bst with i nodes. 
                subtree nodes: i-1. if left has k nodes, then right has i-1-k nodes
                0<= k <= i-1
                this is a problem we've solved.
                 
   
 */
+   public int numTreesRecursion(int n) {
+        if (n <= 0) return 0;
+        return numTreesHelper(n);
+    }
+    
+   private int numTreesHelper(int n){
+        if (n == 0) return 1;
+        if (n == 1) return 1;
+        int res = 0;
+        for (int i = 0; i < n; i++){
+            res += numTrees(i) * numTrees(n-i-1);
+        }
+        return res;
+    }
 
-public int numTrees(int n) {
+public int numTreesDP(int n) {
         if(n<=0) return 0;
         int[] res = new int[n+1];
         res[0] = 1;
