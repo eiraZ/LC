@@ -15,8 +15,9 @@ The root-to-leaf path 1->3 represents the number 13.
 
 Return the sum = 12 + 13 = 25.
 
-Solution: 1. DFS
-          2. BFS
+Solution: 1. DFS using recursion
+          2. BFS using two queues
+          3. DFS using stack: postorder
 
 */
 /**
@@ -65,6 +66,35 @@ Solution: 1. DFS
             }
             if (node.left == null && node.right == null){
                 res += cur;
+            }
+        }
+        return res;
+    }
+    
+        public int sumNumbersPostorderWithStack(TreeNode root) {
+        if (root == null)   return 0;
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode pre = null;
+        TreeNode cur = root;
+        int res = 0;
+        int num = 0;
+        while (cur != null || !stack.isEmpty()){
+            if (cur != null){
+                num = num*10 + cur.val;
+                stack.push(cur);
+                cur = cur.left;
+            }else{
+                TreeNode temp = stack.peek();
+                if (temp.right != null && pre != temp.right){
+                    cur = temp.right;
+                }else{
+                    if (temp.left == null && temp.right == null){
+                        res += num;
+                    }
+                    num /= 10;
+                    pre = temp;
+                    stack.pop();
+                }
             }
         }
         return res;
