@@ -11,6 +11,10 @@ Given binary tree {1,#,2,3},
 return [1,2,3].
 
 Note: Recursive solution is trivial, could you do it iteratively?
+
+Solution: 1. Recursion
+          2. Iteration using stack
+          3. Morris
 */
 /**
  * Definition for binary tree
@@ -60,6 +64,34 @@ Note: Recursive solution is trivial, could you do it iteratively?
         List<Integer> right = preorderTraversal_recursion2(root.right);
         res.addAll(left);
         res.addAll(right);
+        return res;
+        
+    }
+    
+    public List<Integer> preorderTraversalMorris(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        if (root == null)   return res;
+        TreeNode cur = root;
+        
+        while (cur != null){
+            if (cur.left == null){
+                res.add(cur.val);
+                cur = cur.right;
+            }else{
+                TreeNode pre = cur.left;
+                while (pre.right != null && pre.right != cur){
+                    pre = pre.right;
+                }
+                if (pre.right == null){
+                    res.add(cur.val);
+                    pre.right = cur;
+                    cur = cur.left;
+                }else{
+                    pre.right = null;
+                    cur = cur.right;
+                }
+            }
+        }
         return res;
         
     }
