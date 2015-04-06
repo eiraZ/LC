@@ -68,7 +68,7 @@ Solution: preorder traversal.1. Iteration 2. Recursion. 2.2: connect last elemen
  private TreeNode flattenHelper2(TreeNode root, TreeNode tail){
          if (root == null) return tail;
          TreeNode curTail = flattenHelper2(root.right, tail);
-         root.right = flattenHelper2(root.left, tail);
+         root.right = flattenHelper2(root.left, curTail);
          root.left = null;
          return root;
  }
@@ -96,3 +96,23 @@ Solution: preorder traversal.1. Iteration 2. Recursion. 2.2: connect last elemen
     }
     flattenHelper(stack. root.right);
  }
+ public void flattenRe3(TreeNode root) {
+        if (root == null)  return;
+        flatten(root.left);
+        flatten(root.right);
+        //we must check root.left == null or not here! if root.left == null, done. we can't move this line to the second line
+        //e.g.
+        //     1
+        //  #    2
+        //     3
+        if(root.left == null)   return;
+        TreeNode temp = root.left;
+        //find the tail of left linkedlist.
+        while(temp.right != null){
+            temp = temp.right;
+        }
+        //connect
+        temp.right = root.right;
+        root.right = root.left;
+        root.left = null;
+    }
