@@ -48,13 +48,12 @@ public int strStr(String haystack, String needle){
             int i = 0;
             for (; i < needle.length() && haystack.charAt(head+i) == needle.charAt(i); i++);
             if ( i == needle.length()) return head;
-        }else{
-            if (tail == haystack.length()-1) return -1;
-            hayCode -= haystack.charAt(head);
-            head++;
-            tail++;
-            hayCode += haystack.charAt(tail);
         }
+        if (tail == haystack.length()-1) return -1;
+        hayCode -= haystack.charAt(head);
+        head++;
+        tail++;
+        hayCode += haystack.charAt(tail);
     }
     return -1;
     
