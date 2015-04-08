@@ -13,10 +13,11 @@ A solution set is:
 [7] 
 [2, 2, 3] 
 
-Solution: DFS
+Solution: (1)DFS
+          (2)DP: Knapsack 
 
 */
-public List<List<Integer>> combinationSum(int[] num, int target){
+public List<List<Integer>> combinationSumDFS(int[] num, int target){
     List<List<Integer>> res = new ArrayList<List<Integer>>();
     if (num.length == 0 || target <=0)  return res;
     
@@ -35,4 +36,32 @@ private void helper(List<List<Integer>> res, List<Integer> ele, int[] num, int t
         helper(res, ele, num, target-num[i], i);
         ele.remove(ele.size() - 1);
     }
+}
+
+public List<List<Integer>> combinationSumDFS(int[] num, int target){
+    Arrays.sort(num);
+    
+    List<List<List<Integer>>> map = new ArrayList<>();
+    
+    for (int w = 1; w<= target; w++){
+        List<List<Integer>> ele = new ArrayList<>();
+        for (int i = 0; i < num.length && num[i] <= w; i++){
+            if(num[i] == w){
+                List<Integer> sub = new ArrayList<>();
+                sub.add(num[i]);
+                ele.add(sub);
+            }else{
+                for (List<Integer> pre: map.get(w - num[i] - 1)){
+                    if(num[i] <= pre.get(0)){
+                        List<Integer> sub = new ArrayList<>();
+                        sub.add(num[i]);
+                        sub.addAll(pre);
+                        ele.add(sub);
+                    }
+                }
+            }
+        }
+        map.add(ele);
+    }
+    return map.get(target-1);
 }
