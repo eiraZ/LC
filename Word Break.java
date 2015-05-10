@@ -28,6 +28,13 @@ public boolean wordBreakDP(String s, Set<String> dict) {
             res[end] = res[i] &&(dict.contains(sub));
             if (res[end]) break;
         }
+        /*
+        for (int i = 0; i<=end; i++){
+            String sub = s.substring(i, end);
+            res[end] = res[i] &&(dict.contains(sub));
+            if (res[end]) break;
+        }
+        */
     }
     return res[s.length()];
 }
